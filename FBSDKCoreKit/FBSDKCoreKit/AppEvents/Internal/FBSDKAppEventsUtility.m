@@ -18,8 +18,6 @@
 
 #import "FBSDKAppEventsUtility.h"
 
-#import <AdSupport/AdSupport.h>
-
 #import <objc/runtime.h>
 
 #import "FBSDKAccessToken.h"
@@ -41,7 +39,6 @@
 #define FBSDK_APPEVENTSUTILITY_MAX_IDENTIFIER_LENGTH 40
 
 static NSArray<NSString *> *standardEvents;
-static ASIdentifierManager *_cachedAdvertiserIdentifierManager;
 
 @implementation FBSDKAppEventsUtility
 
@@ -170,36 +167,7 @@ static ASIdentifierManager *_cachedAdvertiserIdentifierManager;
 - (NSString *)_advertiserIDFromDynamicFrameworkResolver:(id<FBSDKDynamicFrameworkResolving>)dynamicFrameworkResolver
                                  shouldUseCachedManager:(BOOL)shouldUseCachedManager
 {
-  if (!FBSDKSettings.isAdvertiserIDCollectionEnabled) {
-    return nil;
-  }
-
-  if (@available(iOS 14.0, *)) {
-    if (![FBSDKAppEventsConfigurationManager cachedAppEventsConfiguration].advertiserIDCollectionEnabled) {
-      return nil;
-    }
-  }
-
-  ASIdentifierManager *manager = [self _asIdentifierManagerWithShouldUseCachedManager:shouldUseCachedManager
-                                                             dynamicFrameworkResolver:dynamicFrameworkResolver];
-  return manager.advertisingIdentifier.UUIDString;
-}
-
-- (ASIdentifierManager *)_asIdentifierManagerWithShouldUseCachedManager:(BOOL)shouldUseCachedManager
-                                               dynamicFrameworkResolver:(id<FBSDKDynamicFrameworkResolving>)dynamicFrameworkResolver
-{
-  if (shouldUseCachedManager && _cachedAdvertiserIdentifierManager) {
-    return _cachedAdvertiserIdentifierManager;
-  }
-
-  Class ASIdentifierManagerClass = [dynamicFrameworkResolver asIdentifierManagerClass];
-  ASIdentifierManager *manager = [ASIdentifierManagerClass sharedManager];
-  if (shouldUseCachedManager) {
-    _cachedAdvertiserIdentifierManager = manager;
-  } else {
-    _cachedAdvertiserIdentifierManager = nil;
-  }
-  return manager;
+  return nil;
 }
 
 + (BOOL)isStandardEvent:(nullable NSString *)event
@@ -470,21 +438,5 @@ static ASIdentifierManager *_cachedAdvertiserIdentifierManager;
   NSUInteger matches = [regex numberOfMatchesInString:text options:0 range:NSMakeRange(0, [text length])];
   return matches > 0;
 }
-
-#if DEBUG
- #if FBTEST
-
-+ (ASIdentifierManager *)cachedAdvertiserIdentifierManager
-{
-  return _cachedAdvertiserIdentifierManager;
-}
-
-+ (void)setCachedAdvertiserIdentifierManager:(ASIdentifierManager *)manager
-{
-  _cachedAdvertiserIdentifierManager = manager;
-}
-
- #endif
-#endif
 
 @end

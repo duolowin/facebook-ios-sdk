@@ -624,8 +624,6 @@
 			attributes = {
 				LastUpgradeCheck = 1250;
 				ORGANIZATIONNAME = Facebook;
-				TargetAttributes = {
-				};
 			};
 			buildConfigurationList = 6CF42060EB9AD4C98EF970B4 /* Build configuration list for PBXProject "FBSDKCoreKit_Basics" */;
 			compatibilityVersion = "Xcode 10.0";
@@ -703,7 +701,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = ../scripts/build_phase_swiftlint.sh;
+			shellScript = "../scripts/build_phase_swiftlint.sh\n";
 		};
 		3DD8A9DA71E732A5DE3089CF /* Run Swiftlint */ = {
 			isa = PBXShellScriptBuildPhase;
